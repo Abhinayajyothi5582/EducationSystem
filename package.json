@@ -1,0 +1,22 @@
+{
+  "name": "skillbridge",
+  "version": "1.0.0",
+  "description": "SkillBridge - Verified Student-to-Student Skill Exchange Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node tests/test-core.js"
+  },
+  "keywords": [
+    "skill-exchange",
+    "peer-learning",
+    "student-mentorship",
+    "smart-matching",
+    "credit-system",
+    "verified-portfolio",
+    "hackathon-project"
+  ],
+  "author": "SkillBridge Team",
+  "license": "MIT"
+}

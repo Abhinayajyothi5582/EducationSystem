@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillBridge – Verified Peer-to-Peer Skill Exchange Platform</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- TOP ANNOUNCEMENT BANNER -->
+  <div class="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 border-b border-indigo-500/20 text-xs py-1.5 px-4 text-center font-medium flex items-center justify-center space-x-3">
+    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
+      <i class="fa-solid fa-graduation-cap mr-1.5"></i> Hackathon Edition
+    </span>
+    <span class="text-slate-300 hidden sm:inline">"You teach what you know, and learn what you need." — Zero course fees, 100% verified peer exchange.</span>
+    <button onclick="openDemoSwitchModal()" class="text-indigo-400 hover:text-indigo-300 underline font-semibold ml-2">
+      <i class="fa-solid fa-users mr-1"></i> Quick Switch Demo Persona
+    </button>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+          <i class="fa-solid fa-handshake-angle text-xl text-white"></i>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight text-white flex items-center">
+            Skill<span class="text-indigo-400">Bridge</span>
+            <span class="ml-2 text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Verified</span>
+          </span>
+          <p class="text-[10px] text-slate-400 -mt-0.5 hidden sm:block">Peer-to-Peer Skill Exchange</p>
+        </div>
+      </div>
+
+      <!-- Center Nav Tabs (Desktop) -->
+      <nav class="hidden lg:flex items-center space-x-1">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-3 py-1.5 rounded-lg text-sm font-medium transition text-indigo-400 bg-indigo-950/60 border border-indigo-500/30">
+          <i class="fa-solid fa-chart-pie mr-1.5"></i> Dashboard
+        </button>
+        <button onclick="switchTab('matching')" id="nav-matching" class="tab-btn px-3 py-1.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          <i class="fa-solid fa-people-arrows mr-1.5"></i> Find Partners
+        </button>
+        <button onclick="switchTab('skills')" id="nav-skills" class="tab-btn px-3 py-1.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          <i class="fa-solid fa-award mr-1.5"></i> My Skills
+        </button>
+        <button onclick="switchTab('sessions')" id="nav-sessions" class="tab-btn px-3 py-1.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 relative">
+          <i class="fa-solid fa-calendar-check mr-1.5"></i> Sessions
+          <span id="nav-pending-badge" class="hidden absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+        </button>
+        <button onclick="switchTab('credits')" id="nav-credits" class="tab-btn px-3 py-1.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          <i class="fa-solid fa-coins mr-1.5"></i> My Credits
+        </button>
+        <button onclick="switchTab('passport')" id="nav-passport" class="tab-btn px-3 py-1.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          <i class="fa-solid fa-id-card mr-1.5"></i> Learning Passport
+        </button>
+        <button onclick="switchTab('gapfinder')" id="nav-gapfinder" class="tab-btn px-3 py-1.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          <i class="fa-solid fa-compass mr-1.5"></i> Gap Finder
+        </button>
+      </nav>
+
+      <!-- Right Action Area: Credit Balance & Profile Chip -->
+      <div class="flex items-center space-x-3">
+        <!-- Credit Pill -->
+        <div onclick="switchTab('credits')" class="cursor-pointer group flex items-center space-x-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition">
+          <div class="w-5 h-5 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-[10px] text-slate-900 font-bold">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+          <div class="text-xs">
+            <span id="header-credit-balance" class="font-bold text-amber-400">180</span>
+            <span class="text-slate-400 hidden sm:inline text-[11px]">Credits</span>
+          </div>
+        </div>
+
+        <!-- Student Persona Chip / Switcher -->
+        <div class="relative">
+          <button onclick="toggleUserDropdown()" class="flex items-center space-x-2 p-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500 transition">
+            <img id="header-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Avatar" class="w-7 h-7 rounded-lg object-cover">
+            <div class="text-left hidden sm:block pr-1">
+              <p id="header-name" class="text-xs font-semibold text-slate-200 leading-none">Abhi Sharma</p>
+              <p id="header-college" class="text-[10px] text-indigo-400 leading-none mt-0.5">IIT Delhi</p>
+            </div>
+            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-1"></i>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-64 rounded-xl glass-panel shadow-2xl p-2 z-50 border border-slate-700">
+            <div class="px-3 py-2 border-b border-slate-800">
+              <p class="text-[11px] text-slate-400 uppercase font-semibold">Active Student Persona</p>
+              <p id="dropdown-full-info" class="text-xs font-medium text-slate-200 mt-0.5">Abhi Sharma (IIT Delhi)</p>
+            </div>
+            <div class="py-1">
+              <button onclick="openDemoSwitchModal()" class="w-full text-left px-3 py-2 rounded-lg text-xs hover:bg-slate-800 flex items-center text-slate-300 hover:text-white">
+                <i class="fa-solid fa-repeat text-indigo-400 mr-2"></i> Switch Student (Abhi / Rahul / Priya)
+              </button>
+              <button onclick="switchTab('passport')" class="w-full text-left px-3 py-2 rounded-lg text-xs hover:bg-slate-800 flex items-center text-slate-300 hover:text-white">
+                <i class="fa-solid fa-id-card text-emerald-400 mr-2"></i> View My Learning Passport
+              </button>
+              <button onclick="openAuthModal('login')" class="w-full text-left px-3 py-2 rounded-lg text-xs hover:bg-slate-800 flex items-center text-slate-300 hover:text-white">
+                <i class="fa-solid fa-arrow-right-to-bracket text-blue-400 mr-2"></i> Student Login / Register
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Secondary Tab Bar -->
+    <div class="lg:hidden flex overflow-x-auto py-2 px-4 space-x-2 border-t border-slate-800/80 bg-slate-950/80 text-xs no-scrollbar">
+      <button onclick="switchTab('dashboard')" class="mobile-tab-btn whitespace-nowrap px-3 py-1 rounded-md bg-indigo-900/60 text-indigo-300">Dashboard</button>
+      <button onclick="switchTab('matching')" class="mobile-tab-btn whitespace-nowrap px-3 py-1 rounded-md text-slate-400">Partners</button>
+      <button onclick="switchTab('skills')" class="mobile-tab-btn whitespace-nowrap px-3 py-1 rounded-md text-slate-400">Skills</button>
+      <button onclick="switchTab('sessions')" class="mobile-tab-btn whitespace-nowrap px-3 py-1 rounded-md text-slate-400">Sessions</button>
+      <button onclick="switchTab('credits')" class="mobile-tab-btn whitespace-nowrap px-3 py-1 rounded-md text-slate-400">Credits</button>
+      <button onclick="switchTab('passport')" class="mobile-tab-btn whitespace-nowrap px-3 py-1 rounded-md text-slate-400">Passport</button>
+      <button onclick="switchTab('gapfinder')" class="mobile-tab-btn whitespace-nowrap px-3 py-1 rounded-md text-slate-400">Gap Finder</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dashboard" class="tab-pane space-y-6">
+      
+      <!-- HERO / WELCOME CARD -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-950 via-slate-900 to-slate-900 border border-indigo-500/30 p-6 sm:p-8 shadow-2xl">
+        <div class="relative z-10 max-w-3xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
+            <i class="fa-solid fa-sparkles"></i>
+            <span>Intelligent Peer Learning Active</span>
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
+            Welcome back, <span id="dash-greeting-name" class="gradient-text">Abhi</span>! 👋
+          </h1>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            You know <span class="text-indigo-400 font-semibold">Java</span> and want to learn <span class="text-cyan-400 font-semibold">UI/UX Design</span>. SkillBridge has identified a <span class="text-emerald-400 font-semibold">100% two-way reciprocal match</span> with Rahul from NID Ahmedabad!
+          </p>
+          <div class="pt-2 flex flex-wrap items-center gap-3">
+            <button onclick="switchTab('matching')" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 transition flex items-center">
+              <i class="fa-solid fa-people-arrows mr-2"></i> View Compatible Partners
+            </button>
+            <button onclick="openBookingModal('std_rahul', 'skill_uiux')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-sm font-semibold transition flex items-center">
+              <i class="fa-solid fa-calendar-plus mr-2 text-indigo-400"></i> Book Session with Rahul
+            </button>
+          </div>
+        </div>
+        <!-- Decorative background glow -->
+        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute right-40 -top-10 w-56 h-56 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none"></div>
+      </div>
+
+      <!-- KEY METRICS STATS GRID -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Credit Balance -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">Learning Credits</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-coins"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline space-x-2">
+            <span id="dash-stat-credits" class="text-2xl sm:text-3xl font-extrabold text-white">180</span>
+            <span class="text-xs text-amber-400 font-medium">available</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">1 min teaching = 1 learning credit</p>
+        </div>
+
+        <!-- Hours Taught -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">Teaching Hours</span>
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline space-x-2">
+            <span id="dash-stat-hours" class="text-2xl sm:text-3xl font-extrabold text-white">2.0</span>
+            <span class="text-xs text-indigo-400 font-medium">hrs verified</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">120 total teaching minutes</p>
+        </div>
+
+        <!-- Students Mentored -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">Peers Mentored</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-user-group"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline space-x-2">
+            <span id="dash-stat-students" class="text-2xl sm:text-3xl font-extrabold text-white">2</span>
+            <span class="text-xs text-emerald-400 font-medium">students</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">Across 2 colleges</p>
+        </div>
+
+        <!-- Tutor Rating -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">Peer Rating</span>
+            <div class="w-8 h-8 rounded-lg bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-star"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline space-x-2">
+            <span id="dash-stat-rating" class="text-2xl sm:text-3xl font-extrabold text-white">5.0</span>
+            <span class="text-xs text-yellow-400 font-medium">★★★★★</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">100% positive feedback</p>
+        </div>
+      </div>
+
+      <!-- RECIPROCAL MATCH HIGHLIGHT SPOTLIGHT -->
+      <div class="glass-card rounded-2xl p-6 border border-indigo-500/40 bg-gradient-to-br from-indigo-950/40 via-slate-900/60 to-slate-900/40">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-2">
+            <span class="px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 text-xs font-bold border border-purple-500/40 flex items-center">
+              <i class="fa-solid fa-bolt mr-1.5 text-amber-400"></i> Smart Reciprocal Match
+            </span>
+            <span class="text-xs text-slate-400">Two-way learning reciprocity detected</span>
+          </div>
+          <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">98% Compatibility</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <!-- Left: Current Student (Abhi) -->
+          <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800 text-center">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Abhi" class="w-16 h-16 rounded-full mx-auto object-cover border-2 border-indigo-500 mb-2">
+            <h4 class="font-bold text-white text-sm">Abhi Sharma</h4>
+            <p class="text-xs text-slate-400">IIT Delhi</p>
+            <div class="mt-3 space-y-1.5 text-xs text-left">
+              <div class="bg-indigo-950/60 p-2 rounded border border-indigo-500/30">
+                <span class="text-indigo-400 font-semibold block text-[11px]">Can Teach:</span>
+                <span class="text-white font-medium">Java (Verified 95%)</span>
+              </div>
+              <div class="bg-cyan-950/40 p-2 rounded border border-cyan-500/30">
+                <span class="text-cyan-400 font-semibold block text-[11px]">Wants to Learn:</span>
+                <span class="text-white font-medium">UI/UX Design</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center: The Exchange Bridge -->
+          <div class="text-center space-y-3">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-indigo-600 to-cyan-500 text-white text-lg shadow-lg shadow-indigo-500/30">
+              <i class="fa-solid fa-arrow-right-arrow-left"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-200">Zero Course Fees</p>
+              <p class="text-[11px] text-slate-400">Direct peer knowledge trade</p>
+            </div>
+            <div class="text-xs space-y-1 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 text-slate-300">
+              <p><i class="fa-solid fa-check text-emerald-400 mr-1.5"></i> Abhi teaches Rahul Java</p>
+              <p><i class="fa-solid fa-check text-emerald-400 mr-1.5"></i> Rahul teaches Abhi UI/UX</p>
+            </div>
+            <button onclick="openBookingModal('std_rahul', 'skill_uiux')" class="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition shadow">
+              <i class="fa-solid fa-calendar-check mr-1.5"></i> Request Exchange Session
+            </button>
+          </div>
+
+          <!-- Right: Matched Partner (Rahul) -->
+          <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800 text-center">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80" alt="Rahul" class="w-16 h-16 rounded-full mx-auto object-cover border-2 border-cyan-500 mb-2">
+            <h4 class="font-bold text-white text-sm">Rahul Verma</h4>
+            <p class="text-xs text-slate-400">NID Ahmedabad</p>
+            <div class="mt-3 space-y-1.5 text-xs text-left">
+              <div class="bg-cyan-950/60 p-2 rounded border border-cyan-500/30">
+                <span class="text-cyan-400 font-semibold block text-[11px]">Can Teach:</span>
+                <span class="text-white font-medium">UI/UX Design (Verified 98%)</span>
+              </div>
+              <div class="bg-indigo-950/40 p-2 rounded border border-indigo-500/30">
+                <span class="text-indigo-400 font-semibold block text-[11px]">Wants to Learn:</span>
+                <span class="text-white font-medium">Java</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TWO COLUMN LAYOUT: UPCOMING SESSIONS & RECENT ACTIVITY -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Upcoming Sessions Widget -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-sm flex items-center">
+              <i class="fa-solid fa-calendar-days text-indigo-400 mr-2"></i> Upcoming Learning Sessions
+            </h3>
+            <button onclick="switchTab('sessions')" class="text-xs text-indigo-400 hover:underline">View All</button>
+          </div>
+          <div id="dash-upcoming-list" class="space-y-3">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Verified Badges & Learning Passport Snapshot -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-sm flex items-center">
+              <i class="fa-solid fa-id-badge text-emerald-400 mr-2"></i> Verified Skill Credentials
+            </h3>
+            <button onclick="switchTab('passport')" class="text-xs text-emerald-400 hover:underline">Full Passport</button>
+          </div>
+          <div id="dash-badges-list" class="grid grid-cols-2 gap-3">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- TAB 2: FIND PARTNERS (SMART MATCHING ENGINE) -->
+    <section id="tab-matching" class="tab-pane hidden space-y-6">
+      
+      <!-- Filter & Search Bar -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center">
+            <i class="fa-solid fa-people-arrows text-indigo-400 mr-2"></i> Smart Skill Matching Engine
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            Algorithmically evaluates complementary learning pairs, campus synergy, and verification ratings.
+          </p>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="flex items-center space-x-3 w-full md:w-auto">
+          <select id="matching-filter-skill" onchange="loadMatchingPartners()" class="glass-input text-xs rounded-xl px-3 py-2 w-full md:w-48 bg-slate-900 border-slate-700">
+            <option value="">All Skills</option>
+            <option value="skill_uiux">UI/UX Design</option>
+            <option value="skill_java">Java</option>
+            <option value="skill_python">Python</option>
+            <option value="skill_react">React.js</option>
+            <option value="skill_sql">SQL & Databases</option>
+            <option value="skill_springboot">Spring Boot</option>
+            <option value="skill_ml">Machine Learning</option>
+          </select>
+
+          <button onclick="loadMatchingPartners()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold whitespace-nowrap shadow transition">
+            <i class="fa-solid fa-arrows-rotate mr-1.5"></i> Refresh Matches
+          </button>
+        </div>
+      </div>
+
+      <!-- Partner Cards Container -->
+      <div id="partners-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Injected via JavaScript -->
+      </div>
+
+    </section>
+
+    <!-- TAB 3: MY SKILLS & VERIFICATION QUIZ -->
+    <section id="tab-skills" class="tab-pane hidden space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center">
+            <i class="fa-solid fa-award text-indigo-400 mr-2"></i> Student Skill Profile
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            Declare what you can teach and what you want to learn. Take official skill assessments to earn verified status!
+          </p>
+        </div>
+        <button onclick="openAddSkillModal()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition flex items-center justify-center">
+          <i class="fa-solid fa-plus mr-1.5"></i> Add New Skill
+        </button>
+      </div>
+
+      <!-- Skills Split: Teaching vs Learning -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left: Skills I Can Teach -->
+        <div class="glass-card rounded-2xl p-6 border border-indigo-500/30 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm">
+                <i class="fa-solid fa-chalkboard-user"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-white text-sm">Skills I Can Teach</h3>
+                <p class="text-[11px] text-slate-400">You earn 1 credit per minute teaching these</p>
+              </div>
+            </div>
+            <span id="teach-skills-count" class="text-xs font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-bold">2 Skills</span>
+          </div>
+
+          <div id="teach-skills-list" class="space-y-3">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Right: Skills I Want to Learn -->
+        <div class="glass-card rounded-2xl p-6 border border-cyan-500/30 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm">
+                <i class="fa-solid fa-book-open-reader"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-white text-sm">Skills I Want to Learn</h3>
+                <p class="text-[11px] text-slate-400">Used by the smart engine to match with tutors</p>
+              </div>
+            </div>
+            <span id="learn-skills-count" class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">2 Skills</span>
+          </div>
+
+          <div id="learn-skills-list" class="space-y-3">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- TAB 4: SESSIONS & LIVE ROOM -->
+    <section id="tab-sessions" class="tab-pane hidden space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center">
+            <i class="fa-solid fa-calendar-check text-indigo-400 mr-2"></i> Session Booking & Exchange Manager
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            Coordinate upcoming peer sessions, manage booking requests, and enter the live interactive session room.
+          </p>
+        </div>
+        <button onclick="switchTab('matching')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass mr-1.5 text-indigo-400"></i> Find Mentors to Book
+        </button>
+      </div>
+
+      <!-- Filter tabs for sessions -->
+      <div class="flex items-center space-x-2 border-b border-slate-800 pb-3">
+        <button onclick="filterSessions('ALL')" id="session-filter-ALL" class="session-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white">All Sessions</button>
+        <button onclick="filterSessions('PENDING')" id="session-filter-PENDING" class="session-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white">Pending Requests</button>
+        <button onclick="filterSessions('ACCEPTED')" id="session-filter-ACCEPTED" class="session-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white">Upcoming Confirmed</button>
+        <button onclick="filterSessions('COMPLETED')" id="session-filter-COMPLETED" class="session-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white">Completed History</button>
+      </div>
+
+      <!-- Sessions List -->
+      <div id="sessions-container" class="space-y-4">
+        <!-- Injected via JavaScript -->
+      </div>
+
+    </section>
+
+    <!-- TAB 5: MY CREDITS (WALLET & LEDGER) -->
+    <section id="tab-credits" class="tab-pane hidden space-y-6">
+      
+      <div class="glass-card rounded-2xl p-6 sm:p-8 border border-amber-500/30 bg-gradient-to-r from-amber-950/30 via-slate-900 to-slate-900">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="space-y-2">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/40">
+              <i class="fa-solid fa-coins"></i>
+              <span>SkillBridge Learning Credit Economy</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-white">
+              <span id="credits-wallet-balance">180</span> <span class="text-amber-400 text-xl font-medium">Credits</span>
+            </h2>
+            <p class="text-xs text-slate-300 max-w-xl">
+              SkillBridge eliminates course fees with pure reciprocity: <strong class="text-white">1 teaching minute = 1 learning credit</strong>. Teach what you know to earn credits, and spend them learning skills from verified peers!
+            </p>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-wrap items-center gap-3">
+            <button onclick="claimDemoFaucet()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition flex items-center">
+              <i class="fa-solid fa-gift mr-1.5"></i> Hackathon Test Faucet (+50)
+            </button>
+            <button onclick="switchTab('matching')" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition flex items-center">
+              <i class="fa-solid fa-calendar-plus mr-1.5"></i> Spend on Session
+            </button>
+          </div>
+        </div>
+
+        <!-- Escrow breakdown -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-800">
+          <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+            <span class="text-[11px] text-slate-400 block font-medium">In Escrow (Pending Sessions)</span>
+            <span id="credits-escrow-balance" class="text-lg font-bold text-indigo-400 font-mono">0 Credits</span>
+            <p class="text-[10px] text-slate-500 mt-0.5">Safely held until mutual session confirmation</p>
+          </div>
+          <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+            <span class="text-[11px] text-slate-400 block font-medium">Lifetime Earned</span>
+            <span id="credits-total-earned" class="text-lg font-bold text-emerald-400 font-mono">120 Credits</span>
+            <p class="text-[10px] text-slate-500 mt-0.5">Earned by teaching peer students</p>
+          </div>
+          <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+            <span class="text-[11px] text-slate-400 block font-medium">Lifetime Spent</span>
+            <span id="credits-total-spent" class="text-lg font-bold text-purple-400 font-mono">40 Credits</span>
+            <p class="text-[10px] text-slate-500 mt-0.5">Invested into personal skill learning</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Credit Transactions Ledger Table -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-sm flex items-center">
+            <i class="fa-solid fa-receipt text-indigo-400 mr-2"></i> Credit Transaction Ledger
+          </h3>
+          <span class="text-xs text-slate-400">Immutable Student Ledger</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="text-[11px] uppercase tracking-wider text-slate-400 bg-slate-900/80 border-b border-slate-800">
+              <tr>
+                <th class="py-3 px-4">Timestamp</th>
+                <th class="py-3 px-4">Transaction Type</th>
+                <th class="py-3 px-4">Description</th>
+                <th class="py-3 px-4 text-right">Amount</th>
+                <th class="py-3 px-4 text-right">Balance</th>
+              </tr>
+            </thead>
+            <tbody id="credits-ledger-body" class="divide-y divide-slate-800 font-mono">
+              <!-- Injected via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 6: LEARNING PASSPORT (VERIFIED PORTFOLIO) -->
+    <section id="tab-passport" class="tab-pane hidden space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center">
+            <i class="fa-solid fa-id-card text-emerald-400 mr-2"></i> Verified Learning Passport
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            An official verifiable portfolio of your teaching hours, peer reviews, and skill assessments.
+          </p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition flex items-center">
+            <i class="fa-solid fa-print mr-1.5 text-indigo-400"></i> Print / Export Passport
+          </button>
+        </div>
+      </div>
+
+      <!-- Passport Physical Style Container -->
+      <div class="passport-container glass-card rounded-3xl p-8 border-2 border-indigo-500/40 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 shadow-2xl relative overflow-hidden">
+        
+        <!-- Watermark background seal -->
+        <div class="absolute right-6 top-6 opacity-5 pointer-events-none text-9xl text-indigo-400">
+          <i class="fa-solid fa-award"></i>
+        </div>
+
+        <!-- Passport Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-indigo-500/30 pb-6 gap-4">
+          <div class="flex items-center space-x-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-emerald-400 flex items-center justify-center text-white text-2xl shadow-lg">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase font-bold tracking-widest text-indigo-400">Official Student Credential</span>
+              <h2 class="text-2xl font-black text-white tracking-tight">SkillBridge Learning Passport</h2>
+              <p class="text-xs text-slate-400">Accredited Student Peer Tutoring & Skill Verification</p>
+            </div>
+          </div>
+
+          <div class="text-right">
+            <span class="text-[10px] uppercase tracking-wider text-slate-400 font-mono block">Credential ID</span>
+            <span id="passport-credential-id" class="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">SB-PASS-ABHI-E7B92A</span>
+          </div>
+        </div>
+
+        <!-- Student Profile Identity Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 py-6 border-b border-slate-800">
+          
+          <div class="flex items-center space-x-4">
+            <img id="passport-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Avatar" class="w-20 h-20 rounded-2xl object-cover border-2 border-indigo-500">
+            <div>
+              <h3 id="passport-name" class="text-lg font-bold text-white">Abhi Sharma</h3>
+              <p id="passport-dept" class="text-xs text-slate-300">Computer Science & Engineering</p>
+              <p id="passport-college" class="text-xs font-semibold text-indigo-400">IIT Delhi</p>
+            </div>
+          </div>
+
+          <!-- Verified Summary Stats -->
+          <div class="md:col-span-2 grid grid-cols-3 gap-4 text-center">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Total Teaching</span>
+              <span id="passport-hours" class="text-xl font-black text-white">2.0 hrs</span>
+              <span class="text-[10px] text-slate-500 block">120 Minutes</span>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Peers Helped</span>
+              <span id="passport-mentored" class="text-xl font-black text-white">2 Students</span>
+              <span class="text-[10px] text-slate-500 block">Across Campuses</span>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Overall Rating</span>
+              <span id="passport-rating" class="text-xl font-black text-amber-400">5.0 ★</span>
+              <span class="text-[10px] text-slate-500 block">Verified Reviews</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Verified Skills Showcase -->
+        <div class="py-6 border-b border-slate-800 space-y-4">
+          <h4 class="text-xs uppercase font-bold tracking-wider text-slate-400 flex items-center">
+            <i class="fa-solid fa-shield-check text-emerald-400 mr-2"></i> Verified Technical Competencies
+          </h4>
+          <div id="passport-skills-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Badges & Honors -->
+        <div class="py-6 border-b border-slate-800 space-y-4">
+          <h4 class="text-xs uppercase font-bold tracking-wider text-slate-400 flex items-center">
+            <i class="fa-solid fa-trophy text-amber-400 mr-2"></i> Achievement Badges
+          </h4>
+          <div id="passport-badges-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Peer Testimonials & Reviews -->
+        <div class="pt-6 space-y-4">
+          <h4 class="text-xs uppercase font-bold tracking-wider text-slate-400 flex items-center">
+            <i class="fa-solid fa-comments text-indigo-400 mr-2"></i> Verified Peer Endorsements & Reviews
+          </h4>
+          <div id="passport-reviews-list" class="space-y-3">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- TAB 7: SMART LEARNING GAP FINDER -->
+    <section id="tab-gapfinder" class="tab-pane hidden space-y-6">
+      
+      <div class="glass-card rounded-2xl p-6 sm:p-8 border border-indigo-500/30 bg-gradient-to-r from-slate-900 via-indigo-950/30 to-slate-900">
+        <div class="max-w-3xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/40">
+            <i class="fa-solid fa-compass"></i>
+            <span>Curriculum & Career Intelligence</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Smart Learning Gap Finder</h2>
+          <p class="text-xs sm:text-sm text-slate-300">
+            Select a target career roadmap. SkillBridge analyzes your current skill portfolio, pinpoints missing competencies, and connects you directly with student mentors who can teach those missing skills!
+          </p>
+
+          <!-- Career Selector Dropdown -->
+          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+            <label class="text-xs font-semibold text-slate-300 whitespace-nowrap">Target Career Goal:</label>
+            <select id="gapfinder-role-select" onchange="loadGapFinder()" class="glass-input rounded-xl px-4 py-2 text-xs font-semibold bg-slate-900 border-indigo-500/40 w-full sm:w-auto">
+              <option value="fullstack_java">Full-Stack Java Enterprise Developer</option>
+              <option value="ai_ml_engineer">AI & Machine Learning Engineer</option>
+              <option value="uiux_designer">UI/UX & Product Design Specialist</option>
+              <option value="cloud_devops">Cloud & Microservices Architect</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gap Analysis Results Container -->
+      <div id="gapfinder-results" class="space-y-6">
+        <!-- Injected via JavaScript -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: BOOK SESSION -->
+  <div id="modal-booking" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg rounded-2xl border border-slate-700 shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base flex items-center">
+          <i class="fa-solid fa-calendar-plus text-indigo-400 mr-2"></i> Book Peer Learning Session
+        </h3>
+        <button onclick="closeModal('modal-booking')" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <!-- Teacher Profile Preview -->
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex items-center space-x-3">
+          <img id="booking-teacher-avatar" src="" alt="Teacher" class="w-12 h-12 rounded-xl object-cover">
+          <div>
+            <h4 id="booking-teacher-name" class="font-bold text-white text-sm">Rahul Verma</h4>
+            <p id="booking-teacher-college" class="text-xs text-indigo-400">NID Ahmedabad</p>
+          </div>
+        </div>
+
+        <!-- Selected Skill -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Skill to Learn</label>
+          <input type="text" id="booking-skill-display" readonly class="glass-input w-full rounded-xl px-3 py-2 text-xs text-slate-300 bg-slate-900/50 cursor-not-allowed">
+          <input type="hidden" id="booking-teacher-id">
+          <input type="hidden" id="booking-skill-id">
+        </div>
+
+        <!-- Topic Description -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Session Topic & What You Want to Cover</label>
+          <input type="text" id="booking-topic" placeholder="e.g. Figma Auto-Layout & Design System Tokens" class="glass-input w-full rounded-xl px-3 py-2 text-xs">
+        </div>
+
+        <!-- Date & Time -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Date</label>
+            <input type="date" id="booking-date" class="glass-input w-full rounded-xl px-3 py-2 text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Start Time</label>
+            <input type="time" id="booking-time" value="16:00" class="glass-input w-full rounded-xl px-3 py-2 text-xs">
+          </div>
+        </div>
+
+        <!-- Duration & Credit calculation -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Duration & Credit Cost</label>
+          <select id="booking-duration" onchange="updateBookingCost()" class="glass-input w-full rounded-xl px-3 py-2 text-xs bg-slate-900">
+            <option value="30">30 Minutes (30 Learning Credits)</option>
+            <option value="45">45 Minutes (45 Learning Credits)</option>
+            <option value="60" selected>60 Minutes (60 Learning Credits)</option>
+            <option value="90">90 Minutes (90 Learning Credits)</option>
+          </select>
+        </div>
+
+        <!-- Credit Escrow Explainer Box -->
+        <div class="bg-indigo-950/40 p-3 rounded-xl border border-indigo-500/30 text-xs space-y-1">
+          <div class="flex items-center justify-between font-semibold">
+            <span class="text-slate-300">Escrow Hold Required:</span>
+            <span id="booking-cost-display" class="text-amber-400 font-mono font-bold">60 Credits</span>
+          </div>
+          <p class="text-[11px] text-slate-400">
+            Credits remain safely locked in escrow until the session completes and is confirmed by both participants.
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-3 flex items-center justify-end space-x-3 border-t border-slate-800">
+        <button onclick="closeModal('modal-booking')" class="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white">Cancel</button>
+        <button onclick="submitBookingRequest()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition">
+          <i class="fa-solid fa-paper-plane mr-1.5"></i> Confirm & Send Request
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LIVE VIRTUAL SESSION ROOM SIMULATOR -->
+  <div id="modal-session-room" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-4xl rounded-3xl border border-indigo-500/40 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Room Top Bar -->
+      <div class="bg-slate-900/90 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span> LIVE SESSION
+          </span>
+          <h3 id="room-session-topic" class="font-bold text-white text-sm">Java Collections & Concurrency</h3>
+        </div>
+
+        <!-- Synchronized Countdown Timer -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-1.5 bg-slate-950 px-3 py-1 rounded-lg border border-slate-700 font-mono text-sm text-amber-400 font-bold">
+            <i class="fa-solid fa-stopwatch text-xs"></i>
+            <span id="room-timer-display">58:45</span>
+          </div>
+          <button onclick="closeModal('modal-session-room')" class="text-slate-400 hover:text-white text-base">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Room Main Body: Split Video Stream & Collaborative Scratchpad -->
+      <div class="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 overflow-y-auto">
+        
+        <!-- Video Stream Avatars Simulation -->
+        <div class="space-y-4">
+          <div class="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 aspect-video flex items-center justify-center">
+            <img id="room-teacher-stream" src="" class="w-24 h-24 rounded-full object-cover border-4 border-indigo-500/50 shadow-xl">
+            <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-md text-[11px] font-semibold text-white flex items-center">
+              <i class="fa-solid fa-chalkboard-user mr-1.5 text-indigo-400"></i>
+              <span id="room-teacher-name">Teacher</span> (Speaking)
+            </div>
+            <div class="absolute top-3 right-3 flex items-center space-x-1.5">
+              <span class="w-6 h-6 rounded bg-black/60 flex items-center justify-center text-[10px] text-emerald-400"><i class="fa-solid fa-microphone"></i></span>
+              <span class="w-6 h-6 rounded bg-black/60 flex items-center justify-center text-[10px] text-indigo-400"><i class="fa-solid fa-video"></i></span>
+            </div>
+          </div>
+
+          <div class="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 aspect-video flex items-center justify-center">
+            <img id="room-learner-stream" src="" class="w-24 h-24 rounded-full object-cover border-4 border-cyan-500/50 shadow-xl">
+            <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-md text-[11px] font-semibold text-white flex items-center">
+              <i class="fa-solid fa-book-open-reader mr-1.5 text-cyan-400"></i>
+              <span id="room-learner-name">Learner</span> (Listening)
+            </div>
+            <div class="absolute top-3 right-3 flex items-center space-x-1.5">
+              <span class="w-6 h-6 rounded bg-black/60 flex items-center justify-center text-[10px] text-emerald-400"><i class="fa-solid fa-microphone"></i></span>
+              <span class="w-6 h-6 rounded bg-black/60 flex items-center justify-center text-[10px] text-indigo-400"><i class="fa-solid fa-video"></i></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Shared Code & Whiteboard Notes -->
+        <div class="flex flex-col space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-300 flex items-center">
+              <i class="fa-solid fa-code text-indigo-400 mr-1.5"></i> Collaborative Session Scratchpad
+            </span>
+            <span class="text-[10px] text-slate-500 font-mono">Live Sync</span>
+          </div>
+          <textarea id="room-shared-notes" rows="12" class="glass-input font-mono text-xs w-full flex-1 rounded-xl p-3 resize-none bg-slate-950 border-slate-800 text-slate-200" placeholder="// Live code snippets, links, and session key takeaways...
+// Example:
+HashMap<String, Integer> map = new HashMap<>();
+// Collisions beyond 8 convert linked nodes to Red-Black tree"></textarea>
+
+          <!-- Mutual Confirmation Status Box -->
+          <div class="bg-indigo-950/60 p-4 rounded-2xl border border-indigo-500/40 space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-white flex items-center">
+                <i class="fa-solid fa-handshake mr-1.5 text-emerald-400"></i> Mutual Session Completion
+              </span>
+              <span id="room-credit-payout" class="text-amber-400 font-mono font-bold">Payout: 60 Credits</span>
+            </div>
+            <p class="text-[11px] text-slate-300">
+              Per platform rules, credits transfer <strong class="text-white">only when both students confirm</strong> the session has finished satisfactorily.
+            </p>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div id="room-teacher-confirm-chip" class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-center text-slate-400">
+                <i class="fa-regular fa-circle mr-1"></i> Teacher Confirmation
+              </div>
+              <div id="room-learner-confirm-chip" class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-center text-slate-400">
+                <i class="fa-regular fa-circle mr-1"></i> Learner Confirmation
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="pt-1 flex flex-col sm:flex-row gap-2">
+              <button onclick="confirmRoomCompletion(false)" class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition">
+                <i class="fa-solid fa-check mr-1.5 text-emerald-400"></i> Confirm As Current User
+              </button>
+              <button onclick="confirmRoomCompletion(true)" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-lg shadow-emerald-500/20 transition">
+                <i class="fa-solid fa-check-double mr-1.5"></i> 1-Click Mutual Finish & Transfer Credits
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SKILL VERIFICATION ASSESSMENT QUIZ -->
+  <div id="modal-quiz" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-2xl rounded-3xl border border-indigo-500/40 shadow-2xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-wider text-indigo-400">SkillBridge Verified Assessment</span>
+          <h3 id="quiz-skill-title" class="font-extrabold text-white text-lg sm:text-xl">Java Technical Assessment</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Score 80%+ (4/5) to unlock the official VERIFIED badge on your profile.</p>
+        </div>
+        <button onclick="closeModal('modal-quiz')" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Question List Container -->
+      <div id="quiz-questions-container" class="space-y-6">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Result Banner (Hidden initially) -->
+      <div id="quiz-result-banner" class="hidden p-4 rounded-2xl border text-xs space-y-2">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-800">
+        <button onclick="closeModal('modal-quiz')" class="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white">Cancel</button>
+        <button id="quiz-submit-btn" onclick="submitQuiz()" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition">
+          <i class="fa-solid fa-paper-plane mr-1.5"></i> Submit Assessment & Verify Skill
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: ADD SKILL -->
+  <div id="modal-add-skill" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base">Add Skill to Profile</h3>
+        <button onclick="closeModal('modal-add-skill')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Select Skill</label>
+          <select id="add-skill-select" class="glass-input w-full rounded-xl px-3 py-2 text-xs bg-slate-900">
+            <!-- Injected via JavaScript from /api/skills -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Skill Section</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center space-x-2 p-3 rounded-xl border border-slate-800 bg-slate-900 cursor-pointer">
+              <input type="radio" name="add-skill-type" value="TEACH" checked class="text-indigo-600">
+              <span class="text-xs font-medium text-slate-200">Skills I Can Teach</span>
+            </label>
+            <label class="flex items-center space-x-2 p-3 rounded-xl border border-slate-800 bg-slate-900 cursor-pointer">
+              <input type="radio" name="add-skill-type" value="LEARN" class="text-indigo-600">
+              <span class="text-xs font-medium text-slate-200">Skills I Want to Learn</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Proficiency Level</label>
+          <select id="add-skill-proficiency" class="glass-input w-full rounded-xl px-3 py-2 text-xs bg-slate-900">
+            <option value="Beginner">Beginner (Foundations & Concepts)</option>
+            <option value="Intermediate" selected>Intermediate (Project Experience)</option>
+            <option value="Advanced">Advanced (Production & Optimization)</option>
+            <option value="Expert">Expert (Architecture & Deep Internals)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pt-3 flex items-center justify-end space-x-3 border-t border-slate-800">
+        <button onclick="closeModal('modal-add-skill')" class="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white">Cancel</button>
+        <button onclick="submitAddSkill()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition">Save to Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RATE & REVIEW -->
+  <div id="modal-review" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base flex items-center">
+          <i class="fa-solid fa-star text-amber-400 mr-2"></i> Rate & Review Peer Mentor
+        </h3>
+        <button onclick="closeModal('modal-review')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <input type="hidden" id="review-booking-id">
+
+      <div class="space-y-4">
+        <div class="text-center space-y-2">
+          <p class="text-xs text-slate-300">How was your learning experience?</p>
+          <div class="flex items-center justify-center space-x-2 text-2xl text-slate-600 cursor-pointer" id="star-rating-container">
+            <i class="fa-solid fa-star text-amber-400 star-btn" onclick="setRating(1)"></i>
+            <i class="fa-solid fa-star text-amber-400 star-btn" onclick="setRating(2)"></i>
+            <i class="fa-solid fa-star text-amber-400 star-btn" onclick="setRating(3)"></i>
+            <i class="fa-solid fa-star text-amber-400 star-btn" onclick="setRating(4)"></i>
+            <i class="fa-solid fa-star text-amber-400 star-btn" onclick="setRating(5)"></i>
+          </div>
+          <input type="hidden" id="review-rating" value="5">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Written Feedback</label>
+          <textarea id="review-feedback" rows="3" placeholder="Share specific insights, topics covered, and how helpful the tutor was..." class="glass-input w-full rounded-xl p-3 text-xs"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Key Skills Tagged</label>
+          <input type="text" id="review-skills-tagged" placeholder="e.g. Java, Concurrency, Red-Black Trees" class="glass-input w-full rounded-xl px-3 py-2 text-xs">
+        </div>
+      </div>
+
+      <div class="pt-3 flex items-center justify-end space-x-3 border-t border-slate-800">
+        <button onclick="closeModal('modal-review')" class="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white">Cancel</button>
+        <button onclick="submitReview()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg transition">
+          <i class="fa-solid fa-award mr-1.5"></i> Submit Review & Endorse
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DEMO SWITCH PERSONA -->
+  <div id="modal-demo-switch" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-xl rounded-2xl border border-indigo-500/40 shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-[10px] uppercase font-bold text-indigo-400">Hackathon Presentation Control</span>
+          <h3 class="font-bold text-white text-base">Switch Student Persona</h3>
+        </div>
+        <button onclick="closeModal('modal-demo-switch')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <p class="text-xs text-slate-300">
+        Easily switch between student profiles to demonstrate the mutual 2-way matching, booking requests, and reciprocal credit transfers:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <!-- Abhi -->
+        <button onclick="switchDemoPersona('std_abhi')" class="p-3 rounded-xl border border-indigo-500/40 bg-indigo-950/30 hover:bg-indigo-900/40 text-left transition space-y-1.5">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" class="w-10 h-10 rounded-full object-cover border-2 border-indigo-500">
+          <h4 class="font-bold text-white text-xs">Abhi (IIT Delhi)</h4>
+          <p class="text-[10px] text-indigo-300">Teaches: Java, SQL</p>
+          <p class="text-[10px] text-cyan-300">Wants: UI/UX, React</p>
+          <span class="text-[10px] font-mono font-bold text-amber-400 block pt-1">180 Credits</span>
+        </button>
+
+        <!-- Rahul -->
+        <button onclick="switchDemoPersona('std_rahul')" class="p-3 rounded-xl border border-cyan-500/40 bg-cyan-950/30 hover:bg-cyan-900/40 text-left transition space-y-1.5">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80" class="w-10 h-10 rounded-full object-cover border-2 border-cyan-500">
+          <h4 class="font-bold text-white text-xs">Rahul (NID)</h4>
+          <p class="text-[10px] text-cyan-300">Teaches: UI/UX, Figma</p>
+          <p class="text-[10px] text-indigo-300">Wants: Java, Python</p>
+          <span class="text-[10px] font-mono font-bold text-amber-400 block pt-1">120 Credits</span>
+        </button>
+
+        <!-- Priya -->
+        <button onclick="switchDemoPersona('std_priya')" class="p-3 rounded-xl border border-emerald-500/40 bg-emerald-950/30 hover:bg-emerald-900/40 text-left transition space-y-1.5">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80" class="w-10 h-10 rounded-full object-cover border-2 border-emerald-500">
+          <h4 class="font-bold text-white text-xs">Priya (BITS)</h4>
+          <p class="text-[10px] text-emerald-300">Teaches: Python, ML</p>
+          <p class="text-[10px] text-indigo-300">Wants: Java, Spring</p>
+          <span class="text-[10px] font-mono font-bold text-amber-400 block pt-1">90 Credits</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script src="app.js"></script>
+</body>
+</html>
